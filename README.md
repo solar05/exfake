@@ -1,6 +1,9 @@
+[![CI](https://github.com/solar05/exfake/actions/workflows/elixir.yml/badge.svg)](https://github.com/solar05/exfake/actions/workflows/elixir.yml)
+![Hex.pm](https://img.shields.io/hexpm/v/exfake)
+![Hex.pm](https://img.shields.io/hexpm/l/exfake)
 # Exfake
 
-**TODO: Add description**
+Elixir library for fake data generation.
 
 ## Installation
 
@@ -18,4 +21,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at <https://hexdocs.pm/exfake>.
-
