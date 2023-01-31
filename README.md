@@ -7,17 +7,15 @@ Elixir library for fake data generation.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+The package [available in Hex](https://hex.pm/packages/exfake) and can be installed
 by adding `exfake` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:exfake, "~> 0.1.0"}
+    {:exfake, "~> 0.1.1"}
   ]
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/exfake>.
+Documentation can be found at [HexDocs.](https://hexdocs.pm/exfake/Exfake.html)
