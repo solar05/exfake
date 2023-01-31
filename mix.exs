@@ -4,7 +4,7 @@ defmodule Exfake.MixProject do
   def project do
     [
       app: :exfake,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),

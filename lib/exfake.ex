@@ -3,7 +3,7 @@ defmodule Exfake do
   Documentation for `Exfake`.
   """
 
-  alias Datasets.{Names, Phones, Lorem, Company}
+  alias Datasets.{Names, Phones, Lorem, Company, Xss}
 
   @doc """
   Generates first name.
@@ -187,5 +187,35 @@ defmodule Exfake do
       "#{gen_last_name()}, #{gen_last_name()} and #{gen_last_name()}"
     ]
     |> Enum.random()
+  end
+
+  @doc """
+  Generates a random XSS string.
+
+  ## Examples
+
+      iex> Exfake.gen_xss_string()
+      "<BODY BACKGROUND=\"javascript:alert('XSS')\">"
+      iex> Exfake.gen_xss_string()
+      "<A HREF=\"http://0102.0146.0007.00000223/\">XSS</A>"
+  """
+  @spec gen_xss_string :: String.t()
+  def gen_xss_string() do
+    Enum.random(Xss.data())
+  end
+
+  @doc """
+  Generates a random XSS file.
+
+  ## Examples
+
+      iex> Exfake.gen_xss_file()
+      "<TABLE><TD BACKGROUND=\"javascript:alert('XSS')\">.txt"
+      iex> Exfake.gen_xss_file()
+      "<IMG SRC=\"javascript:alert('XSS');\">.txt"
+  """
+  @spec gen_xss_file :: String.t()
+  def gen_xss_file() do
+    Enum.random(Xss.files())
   end
 end
