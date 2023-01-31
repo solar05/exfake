@@ -108,7 +108,7 @@ defmodule Exfake do
   Default sentence count is 3.
   Default words count between 2 and 5.
 
-    ## Examples
+  ## Examples
 
       iex> Exfake.gen_paragraphs()
       "Ut iure. Dicta officiis fugit sapiente consequuntur. Tenetur nisi."
