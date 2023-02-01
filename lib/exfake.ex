@@ -218,4 +218,21 @@ defmodule Exfake do
   def gen_xss_file() do
     Enum.random(Xss.files())
   end
+
+  @doc """
+  Generates a random IPv4 address.
+
+  ## Examples
+
+      iex> Exfake.gen_ipv4()
+      "145.77.91.223"
+      iex> Exfake.gen_ipv4()
+      "17.94.49.5"
+  """
+  @spec gen_ipv4 :: String.t()
+  def gen_ipv4 do
+    head = [Enum.random(1..255)]
+    body = 1..3 |> Enum.map(fn _ -> Enum.random(0..255) end)
+    (head ++ body) |> Enum.join(".")
+  end
 end
