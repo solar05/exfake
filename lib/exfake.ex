@@ -111,11 +111,11 @@ defmodule Exfake do
   ## Examples
 
       iex> Exfake.gen_paragraphs()
-      "Ut iure. Dicta officiis fugit sapiente consequuntur. Tenetur nisi."
+      "Statement waste mind. Verse sugar answer adjustment behavior. Soup attempt."
       iex> Exfake.gen_paragraphs(3, 2)
-      "Est deserunt. Non quae. Consectetur consequatur."
+      "Smoke ink. Cry day. Company stop."
       iex> Exfake.gen_paragraphs(3, 2)
-      "Aut non. Eos voluptas. Et libero asperiores. Fugiat esse suscipit. Magnam accusamus molestias aperiam."
+      "Nation wind. Sea stone. Minute comparison."
   """
   @spec gen_paragraphs(pos_integer, pos_integer()) :: String.t()
   def gen_paragraphs(n \\ 3, limit \\ 5) when n > 0 do

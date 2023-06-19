@@ -36,10 +36,10 @@ Exfake.gen_phone_number()
 "684-126-0269"
 
 Exfake.gen_sentence()
-"Dolorum sed tempora quod quisquam."
+"Event minute view."
 
 Exfake.gen_paragraphs()
-"Ut iure. Dicta officiis fugit sapiente consequuntur. Tenetur nisi."
+"Statement waste mind. Verse sugar answer adjustment behavior. Soup attempt."
 
 Exfake.gen_catch_phrase()
 "Re-engineered maximized productivity"
@@ -52,24 +52,6 @@ Exfake.gen_ipv4()
 
 Exfake.gen_domain()
 "www.laboriosam.me"
-
-Exfake.gen_us_state()
-"South Dakota"
-
-Exfake.gen_city()
-"West Abbigailfort"
-
-Exfake.gen_secondary_address()
-"Apt. 7007 Suite 9896"
-
-Exfake.gen_street_name()
-"Carson Garden"
-
-Exfake.gen_street_address()
-"66320 7395 864"
-
-Exfake.gen_street_address(true)
-"87648 6785 762 Apt. 1378 Suite 6759"
 ```
 
 Other generators are described in [hex documentation.](https://hexdocs.pm/exfake/Exfake.html)
