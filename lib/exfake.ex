@@ -10,13 +10,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_first_name()
+      iex> Exfake.first_name()
       "Jake"
-      iex> Exfake.gen_first_name()
+      iex> Exfake.first_name()
       "Rosemary"
   """
-  @spec gen_first_name :: String.t()
-  def gen_first_name() do
+  @spec first_name :: String.t()
+  def first_name() do
     Enum.random(Names.first_names())
   end
 
@@ -25,13 +25,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_last_name()
+      iex> Exfake.last_name()
       "Nitzsche"
-      iex> Exfake.gen_last_name()
+      iex> Exfake.last_name()
       "Adams"
   """
-  @spec gen_last_name :: String.t()
-  def gen_last_name() do
+  @spec last_name :: String.t()
+  def last_name() do
     Enum.random(Names.last_names())
   end
 
@@ -40,14 +40,14 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_person()
+      iex> Exfake.person()
       "Jake Nitzsche"
-      iex> Exfake.gen_person()
+      iex> Exfake.person()
       "Luciano Eichmann"
   """
-  @spec gen_person :: String.t()
-  def gen_person() do
-    "#{gen_first_name()} #{gen_last_name()}"
+  @spec person :: String.t()
+  def person() do
+    "#{first_name()} #{last_name()}"
   end
 
   @doc """
@@ -55,13 +55,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_phone_number()
+      iex> Exfake.phone_number()
       "684-126-0269"
-      iex> Exfake.gen_phone_number()
+      iex> Exfake.phone_number()
       "1-319-098-3384 x06095"
   """
-  @spec gen_phone_number :: String.t()
-  def gen_phone_number() do
+  @spec phone_number :: String.t()
+  def phone_number() do
     Phones.formats()
     |> Enum.random()
     |> String.replace("#", fn _ -> Integer.to_string(Enum.random(0..9)) end)
@@ -72,13 +72,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_word()
+      iex> Exfake.word()
       "burn"
-      iex> Exfake.gen_word()
+      iex> Exfake.word()
       "language"
   """
-  @spec gen_word :: String.t()
-  def gen_word() do
+  @spec word :: String.t()
+  def word() do
     Enum.random(Lorem.en_words())
   end
 
@@ -89,16 +89,15 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_sentence()
+      iex> Exfake.sentence()
       "Judge taste page porter harmony."
-      iex> Exfake.gen_sentece(3)
+      iex> Exfake.sentece(3)
       "Event minute view."
   """
-  @spec gen_sentence(pos_integer) :: String.t()
-  def gen_sentence(count \\ 5) when count > 1 do
-    beg = gen_word() |> String.capitalize()
-    body = 1..(count - 1) |> Enum.map(fn _ -> gen_word() end) |> Enum.join(" ")
-
+  @spec sentence(pos_integer) :: String.t()
+  def sentence(count \\ 5) when count > 1 do
+    beg = word() |> String.capitalize()
+    body = 1..(count - 1) |> Enum.map_join(" ", fn _ -> word() end)
     "#{beg} #{body}."
   end
 
@@ -110,16 +109,16 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_paragraphs()
+      iex> Exfake.paragraphs()
       "Statement waste mind. Verse sugar answer adjustment behavior. Soup attempt."
-      iex> Exfake.gen_paragraphs(3, 2)
+      iex> Exfake.paragraphs(3, 2)
       "Smoke ink. Cry day. Company stop."
-      iex> Exfake.gen_paragraphs(3, 2)
+      iex> Exfake.paragraphs(3, 2)
       "Nation wind. Sea stone. Minute comparison."
   """
-  @spec gen_paragraphs(pos_integer, pos_integer()) :: String.t()
-  def gen_paragraphs(n \\ 3, limit \\ 5) when n > 0 do
-    1..n |> Enum.map(fn _ -> gen_sentence(Enum.random(2..limit)) end) |> Enum.join(" ")
+  @spec paragraphs(pos_integer, pos_integer()) :: String.t()
+  def paragraphs(n \\ 3, limit \\ 5) when n > 0 do
+    1..n |> Enum.map_join(" ", fn _ -> sentence(Enum.random(2..limit)) end)
   end
 
   @doc """
@@ -127,13 +126,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_company_suffix()
+      iex> Exfake.company_suffix()
       "Inc"
-      iex> Exfake.gen_company_suffix()
+      iex> Exfake.company_suffix()
       "LLC"
   """
-  @spec gen_company_suffix() :: String.t()
-  def gen_company_suffix() do
+  @spec company_suffix() :: String.t()
+  def company_suffix() do
     Enum.random(Company.suffixes())
   end
 
@@ -142,14 +141,14 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_catch_phrase()
+      iex> Exfake.catch_phrase()
       "Re-engineered maximized productivity"
-      iex> Exfake.gen_catch_phrase()
+      iex> Exfake.catch_phrase()
       "Right-sized hybrid complexity"
   """
-  @spec gen_catch_phrase() :: String.t()
-  def gen_catch_phrase() do
-    Enum.map(Company.catch_phrase_words(), &Enum.random/1) |> Enum.join(" ")
+  @spec catch_phrase() :: String.t()
+  def catch_phrase() do
+    Enum.map_join(Company.catch_phrase_words(), " ", &Enum.random/1)
   end
 
   @doc """
@@ -157,14 +156,14 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_bs()
+      iex> Exfake.bs()
       "reintermediate granular niches"
-      iex> Exfake.gen_bs()
+      iex> Exfake.bs()
       "unleash user-centric markets"
   """
-  @spec gen_bs :: String.t()
-  def gen_bs() do
-    Enum.map(Company.bs_words(), &Enum.random/1) |> Enum.join(" ")
+  @spec bs :: String.t()
+  def bs() do
+    Enum.map_join(Company.bs_words(), " ", &Enum.random/1)
   end
 
   @doc """
@@ -172,19 +171,19 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_company_name()
+      iex> Exfake.company_name()
       "Klein, Mueller and Windler"
-      iex> Exfake.gen_company_name()
+      iex> Exfake.company_name()
       "Zion Kerluke LLC"
-      iex> Exfake.gen_company_name()
+      iex> Exfake.company_name()
       "Legros-Yundt"
   """
-  @spec gen_company_name :: String.t()
-  def gen_company_name() do
+  @spec company_name :: String.t()
+  def company_name() do
     [
-      "#{gen_person()} #{gen_company_suffix()}",
-      "#{gen_last_name()}-#{gen_last_name()}",
-      "#{gen_last_name()}, #{gen_last_name()} and #{gen_last_name()}"
+      "#{person()} #{company_suffix()}",
+      "#{last_name()}-#{last_name()}",
+      "#{last_name()}, #{last_name()} and #{last_name()}"
     ]
     |> Enum.random()
   end
@@ -194,13 +193,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_xss_string()
+      iex> Exfake.xss_string()
       "<BODY BACKGROUND=\"javascript:alert('XSS')\">"
-      iex> Exfake.gen_xss_string()
+      iex> Exfake.xss_string()
       "<A HREF=\"http://0102.0146.0007.00000223/\">XSS</A>"
   """
-  @spec gen_xss_string :: String.t()
-  def gen_xss_string() do
+  @spec xss_string :: String.t()
+  def xss_string() do
     Enum.random(Xss.data())
   end
 
@@ -209,13 +208,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_xss_file()
+      iex> Exfake.xss_file()
       "<TABLE><TD BACKGROUND=\"javascript:alert('XSS')\">.txt"
-      iex> Exfake.gen_xss_file()
+      iex> Exfake.xss_file()
       "<IMG SRC=\"javascript:alert('XSS');\">.txt"
   """
-  @spec gen_xss_file :: String.t()
-  def gen_xss_file() do
+  @spec xss_file :: String.t()
+  def xss_file() do
     Enum.random(Xss.files())
   end
 
@@ -224,13 +223,13 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_ipv4()
+      iex> Exfake.ipv4()
       "145.77.91.223"
-      iex> Exfake.gen_ipv4()
+      iex> Exfake.ipv4()
       "17.94.49.5"
   """
-  @spec gen_ipv4 :: String.t()
-  def gen_ipv4() do
+  @spec ipv4 :: String.t()
+  def ipv4() do
     head = [Enum.random(1..255)]
     body = 1..3 |> Enum.map(fn _ -> Enum.random(0..255) end)
     (head ++ body) |> Enum.join(".")
@@ -241,14 +240,14 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_email()
+      iex> Exfake.email()
       "dallas@gmail.com"
-      iex> Exfake.gen_email()
+      iex> Exfake.email()
       "miller@hotmail.com"
   """
-  @spec gen_email :: String.t()
-  def gen_email() do
-    "#{String.downcase(gen_first_name())}@#{Enum.random(Internet.free_domains())}"
+  @spec email :: String.t()
+  def email() do
+    "#{String.downcase(first_name())}@#{Enum.random(Internet.free_domains())}"
   end
 
   @doc """
@@ -256,14 +255,14 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_domain()
+      iex> Exfake.domain()
       "www.laboriosam.me"
-      iex> Exfake.gen_email()
+      iex> Exfake.email()
       "www.nihil.biz"
   """
-  @spec gen_domain :: String.t()
-  def gen_domain() do
-    "www.#{String.downcase(gen_word())}.#{Enum.random(Internet.suffixes())}"
+  @spec domain :: String.t()
+  def domain() do
+    "www.#{String.downcase(word())}.#{Enum.random(Internet.suffixes())}"
   end
 
   @doc """
@@ -271,15 +270,15 @@ defmodule Exfake do
 
   ## Examples
 
-      iex> Exfake.gen_zip_code()
+      iex> Exfake.zip_code()
       "32107-6766"
-      iex> Exfake.gen_zip_code()
+      iex> Exfake.zip_code()
       "9152"
   """
-  @spec gen_zip_code :: String.t()
-  def gen_zip_code() do
-    without_dash = 0..3 |> Enum.map(fn _ -> Enum.random(0..9) end) |> Enum.join()
-    with_dash = "#{without_dash}-#{Enum.map(0..3, fn _ -> Enum.random(0..9) end) |> Enum.join()}"
+  @spec zip_code :: String.t()
+  def zip_code() do
+    without_dash = 0..3 |> Enum.map_join(fn _ -> Enum.random(0..9) end)
+    with_dash = "#{without_dash}-#{Enum.map_join(0..3, fn _ -> Enum.random(0..9) end)}"
 
     [with_dash, without_dash] |> Enum.random()
   end

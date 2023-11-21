@@ -4,7 +4,7 @@ defmodule Exfake.MixProject do
   def project do
     [
       app: :exfake,
-      version: "1.0.1",
+      version: "2.0.0",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -26,7 +26,8 @@ defmodule Exfake.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.27", only: [:dev], runtime: false},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev], runtime: false},
+      {:credo, "~> 1.7", only: [:dev], runtime: false}
     ]
   end
 
