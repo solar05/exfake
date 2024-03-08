@@ -13,7 +13,7 @@ by adding `exfake` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:exfake, "~> 2.0.0"}
+    {:exfake, "~> 2.1.0"}
   ]
 end
 ```
@@ -50,8 +50,17 @@ Exfake.company_name()
 Exfake.ipv4()
 "145.77.91.223"
 
+Exfake.ipv6()
+"BCB6:C612:24B1:D067:3B27:B8BC:187A:9CCB"
+
 Exfake.domain()
 "www.laboriosam.me"
+
+Exfake.currency()
+["Japan Yen", "JPY", "¥"]
+
+Exfake.language_code()
+"ne"
 ```
 
 Other generators are described in [hex documentation.](https://hexdocs.pm/exfake/Exfake.html)

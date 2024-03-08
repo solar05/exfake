@@ -15,7 +15,7 @@ defmodule Exfake do
       iex> Exfake.first_name()
       "Rosemary"
   """
-  @spec first_name :: String.t()
+  @spec first_name() :: String.t()
   def first_name() do
     Enum.random(Names.first_names())
   end
@@ -30,7 +30,7 @@ defmodule Exfake do
       iex> Exfake.last_name()
       "Adams"
   """
-  @spec last_name :: String.t()
+  @spec last_name() :: String.t()
   def last_name() do
     Enum.random(Names.last_names())
   end
@@ -45,7 +45,7 @@ defmodule Exfake do
       iex> Exfake.person()
       "Luciano Eichmann"
   """
-  @spec person :: String.t()
+  @spec person() :: String.t()
   def person() do
     "#{first_name()} #{last_name()}"
   end
@@ -60,7 +60,7 @@ defmodule Exfake do
       iex> Exfake.phone_number()
       "1-319-098-3384 x06095"
   """
-  @spec phone_number :: String.t()
+  @spec phone_number() :: String.t()
   def phone_number() do
     Phones.formats()
     |> Enum.random()
@@ -77,7 +77,7 @@ defmodule Exfake do
       iex> Exfake.word()
       "language"
   """
-  @spec word :: String.t()
+  @spec word() :: String.t()
   def word() do
     Enum.random(Lorem.en_words())
   end
@@ -122,6 +122,21 @@ defmodule Exfake do
   end
 
   @doc """
+  Generates a random language code.
+
+  ## Examples
+
+      iex> Exfake.language_code()
+      "gv"
+      iex> Exfake.language_code()
+      "ne"
+  """
+  @spec language_code() :: String.t()
+  def language_code() do
+    Enum.random(Lorem.language_codes())
+  end
+
+  @doc """
   Generates a random company suffix.
 
   ## Examples
@@ -161,7 +176,7 @@ defmodule Exfake do
       iex> Exfake.bs()
       "unleash user-centric markets"
   """
-  @spec bs :: String.t()
+  @spec bs() :: String.t()
   def bs() do
     Enum.map_join(Company.bs_words(), " ", &Enum.random/1)
   end
@@ -178,7 +193,7 @@ defmodule Exfake do
       iex> Exfake.company_name()
       "Legros-Yundt"
   """
-  @spec company_name :: String.t()
+  @spec company_name() :: String.t()
   def company_name() do
     [
       "#{person()} #{company_suffix()}",
@@ -186,6 +201,23 @@ defmodule Exfake do
       "#{last_name()}, #{last_name()} and #{last_name()}"
     ]
     |> Enum.random()
+  end
+
+  @doc """
+  Returns a random currency which represented in few format.
+
+  ## Examples
+
+      iex> Exfake.currency()
+      ["Costa Rica Colon", "CRC", "₡"]
+      iex> Exfake.currency()
+      ["Japan Yen", "JPY", "¥"]
+      iex> Exfake.currency()
+      ["Liberia Dollar", "LRD", "$"]
+  """
+  @spec currency() :: [String.t(), ...]
+  def currency() do
+    Enum.random(Lorem.currencies())
   end
 
   @doc """
@@ -198,7 +230,7 @@ defmodule Exfake do
       iex> Exfake.xss_string()
       "<A HREF=\"http://0102.0146.0007.00000223/\">XSS</A>"
   """
-  @spec xss_string :: String.t()
+  @spec xss_string() :: String.t()
   def xss_string() do
     Enum.random(Xss.data())
   end
@@ -213,7 +245,7 @@ defmodule Exfake do
       iex> Exfake.xss_file()
       "<IMG SRC=\"javascript:alert('XSS');\">.txt"
   """
-  @spec xss_file :: String.t()
+  @spec xss_file() :: String.t()
   def xss_file() do
     Enum.random(Xss.files())
   end
@@ -228,11 +260,73 @@ defmodule Exfake do
       iex> Exfake.ipv4()
       "17.94.49.5"
   """
-  @spec ipv4 :: String.t()
+  @spec ipv4() :: String.t()
   def ipv4() do
     head = [Enum.random(1..255)]
-    body = 1..3 |> Enum.map(fn _ -> Enum.random(0..255) end)
+    body = 1..3 |> Enum.map(fn _ -> Enum.random(0..256) end)
     (head ++ body) |> Enum.join(".")
+  end
+
+  @doc """
+  Generates a random IPv6 address.
+
+  ## Examples
+
+      iex> Exfake.ipv6()
+      "BCB6:C612:24B1:D067:3B27:B8BC:187A:9CCB"
+      iex> Exfake.ipv6()
+      "90A1:238:65DD:EC7F:CF3A:1AB0:B2DE:C8A3"
+  """
+  @spec ipv6() :: String.t()
+  def ipv6() do
+    1..8
+    |> Enum.map(fn _ -> Integer.to_string(Enum.random(0..65_536), 16) end)
+    |> Enum.join(":")
+  end
+
+  @doc """
+  Generates a random MAC address.
+
+  ## Examples
+
+      iex> Exfake.mac()
+      "15:91:207:109:70:248"
+      iex> Exfake.mac()
+      "108:240:198:106:40:61"
+  """
+  @spec mac() :: String.t()
+  def mac() do
+    1..6
+    |> Enum.map(fn _ -> String.downcase(Integer.to_string(Enum.random(0..256))) end)
+    |> Enum.join(":")
+  end
+
+  @doc """
+  Generates a random HTTP code.
+
+  ## Examples
+
+      iex> Exfake.http_code()
+      308
+      iex> Exfake.http_code()
+      201
+      iex> Exfake.http_code(:info)
+      102
+      iex> Exfake.http_code(:server_error)
+      503
+  """
+  @spec http_code() :: non_neg_integer()
+  @spec http_code(:client_error | :info | :redirection | :server_error | :success) ::
+          non_neg_integer()
+  def http_code() do
+    [:info, :success, :redirection, :client_error, :server_error]
+    |> Enum.random()
+    |> http_code()
+  end
+
+  def http_code(code)
+      when code in [:info, :success, :redirection, :client_error, :server_error] do
+    Map.get(Internet.status_codes(), code) |> Enum.random()
   end
 
   @doc """
@@ -245,7 +339,7 @@ defmodule Exfake do
       iex> Exfake.email()
       "miller@hotmail.com"
   """
-  @spec email :: String.t()
+  @spec email() :: String.t()
   def email() do
     "#{String.downcase(first_name())}@#{Enum.random(Internet.free_domains())}"
   end
@@ -260,9 +354,25 @@ defmodule Exfake do
       iex> Exfake.email()
       "www.nihil.biz"
   """
-  @spec domain :: String.t()
+  @spec domain() :: String.t()
   def domain() do
     "www.#{String.downcase(word())}.#{Enum.random(Internet.suffixes())}"
+  end
+
+  @doc """
+  Generates a random URL.
+
+  ## Examples
+
+      iex> Exfake.url()
+      "http://www.roll.me"
+      iex> Exfake.url()
+      "https://www.front.com"
+  """
+  @spec url() :: String.t()
+  def url() do
+    protocol = Enum.random(["http", "https"])
+    "#{protocol}://#{domain()}"
   end
 
   @doc """
@@ -275,7 +385,7 @@ defmodule Exfake do
       iex> Exfake.zip_code()
       "9152"
   """
-  @spec zip_code :: String.t()
+  @spec zip_code() :: String.t()
   def zip_code() do
     without_dash = 0..3 |> Enum.map_join(fn _ -> Enum.random(0..9) end)
     with_dash = "#{without_dash}-#{Enum.map_join(0..3, fn _ -> Enum.random(0..9) end)}"
