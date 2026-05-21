@@ -3,7 +3,7 @@ defmodule Exfake do
   Documentation for `Exfake`.
   """
 
-  alias Datasets.{Names, Phones, Lorem, Company, Xss, Internet}
+  alias Datasets.{Names, Phones, Lorem, Company, Xss, Internet, Web, Address}
 
   @doc """
   Generates first name.
@@ -393,5 +393,346 @@ defmodule Exfake do
     with_dash = "#{without_dash}-#{Enum.map_join(0..3, fn _ -> Enum.random(0..9) end)}"
 
     [with_dash, without_dash] |> Enum.random()
+  end
+
+  @doc """
+  Generates a random boolean.
+
+  ## Examples
+
+      iex> Exfake.boolean()
+      true
+  """
+  @spec boolean() :: boolean()
+  def boolean(), do: Enum.random([true, false])
+
+  @doc """
+  Generates a random integer between min and max (inclusive).
+
+  ## Examples
+
+      iex> Exfake.integer(1, 10)
+      7
+  """
+  @spec integer(integer(), integer()) :: integer()
+  def integer(min, max) when is_integer(min) and is_integer(max) and min <= max do
+    Enum.random(min..max)
+  end
+
+  @doc """
+  Generates a random float between min and max.
+
+  ## Examples
+
+      iex> Exfake.float(1.0, 5.0)
+      3.14
+  """
+  @spec float(number(), number()) :: float()
+  def float(min, max) when is_number(min) and is_number(max) and min <= max do
+    min + :rand.uniform() * (max - min)
+  end
+
+  @doc """
+  Generates a random UUID v4.
+
+  ## Examples
+
+      iex> Exfake.uuid()
+      "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  """
+  @spec uuid() :: String.t()
+  def uuid() do
+    <<a::32, b::16, _::4, c::12, _::2, d::6, e::8, f::48>> = :crypto.strong_rand_bytes(16)
+    time_hi = 0x4000 + c
+    clk_seq = (0x80 + d) * 256 + e
+
+    "#{pad_hex(a, 8)}-#{pad_hex(b, 4)}-#{pad_hex(time_hi, 4)}-#{pad_hex(clk_seq, 4)}-#{pad_hex(f, 12)}"
+  end
+
+  @doc """
+  Generates a random hex color code.
+
+  ## Examples
+
+      iex> Exfake.hex_color()
+      "#A3F2C1"
+  """
+  @spec hex_color() :: String.t()
+  def hex_color() do
+    "#" <>
+      hex_byte(Enum.random(0..255)) <>
+      hex_byte(Enum.random(0..255)) <>
+      hex_byte(Enum.random(0..255))
+  end
+
+  @doc """
+  Generates a random `Date` within ±10 years of today.
+
+  ## Examples
+
+      iex> Exfake.date()
+      ~D[2023-07-14]
+  """
+  @spec date() :: Date.t()
+  def date() do
+    Date.add(Date.utc_today(), Enum.random(-3650..3650))
+  end
+
+  @doc """
+  Generates a random `Date` in the past, within the given number of days.
+
+  ## Examples
+
+      iex> Exfake.past_date()
+      ~D[2025-11-03]
+      iex> Exfake.past_date(30)
+      ~D[2026-04-28]
+  """
+  @spec past_date(pos_integer()) :: Date.t()
+  def past_date(days \\ 365) when is_integer(days) and days > 0 do
+    Date.add(Date.utc_today(), -Enum.random(1..days))
+  end
+
+  @doc """
+  Generates a random `Date` in the future, within the given number of days.
+
+  ## Examples
+
+      iex> Exfake.future_date()
+      ~D[2026-09-17]
+      iex> Exfake.future_date(30)
+      ~D[2026-06-10]
+  """
+  @spec future_date(pos_integer()) :: Date.t()
+  def future_date(days \\ 365) when is_integer(days) and days > 0 do
+    Date.add(Date.utc_today(), Enum.random(1..days))
+  end
+
+  @doc """
+  Generates a random price rounded to 2 decimal places.
+
+  ## Examples
+
+      iex> Exfake.price()
+      249.99
+      iex> Exfake.price(5.0, 20.0)
+      14.37
+  """
+  @spec price(number(), number()) :: float()
+  def price(min \\ 1.0, max \\ 1000.0) when is_number(min) and is_number(max) and min <= max do
+    (min + :rand.uniform() * (max - min)) |> Float.round(2)
+  end
+
+  @card_prefixes [
+    {"4", 16},
+    {"51", 16},
+    {"52", 16},
+    {"53", 16},
+    {"54", 16},
+    {"55", 16},
+    {"34", 15},
+    {"37", 15},
+    {"6011", 16}
+  ]
+
+  @doc """
+  Returns a random credit card type name.
+
+  ## Examples
+
+      iex> Exfake.credit_card_type()
+      "Visa"
+  """
+  @spec credit_card_type() :: String.t()
+  def credit_card_type() do
+    Enum.random(["Visa", "Mastercard", "American Express", "Discover", "JCB"])
+  end
+
+  @doc """
+  Generates a random Luhn-valid credit card number (15–16 digits).
+
+  ## Examples
+
+      iex> Exfake.credit_card_number()
+      "4532015112830366"
+  """
+  @spec credit_card_number() :: String.t()
+  def credit_card_number() do
+    {prefix, length} = Enum.random(@card_prefixes)
+    fill = length - String.length(prefix) - 1
+    partial = prefix <> Enum.map_join(1..fill, fn _ -> Integer.to_string(Enum.random(0..9)) end)
+    partial <> Integer.to_string(luhn_check_digit(partial))
+  end
+
+  @doc """
+  Returns a random MIME type string.
+
+  ## Examples
+
+      iex> Exfake.mime_type()
+      "image/png"
+  """
+  @spec mime_type() :: String.t()
+  def mime_type() do
+    {mime, _ext} = Enum.random(Web.mime_types())
+    mime
+  end
+
+  @doc """
+  Generates a random file name with an extension matching a random MIME type.
+
+  ## Examples
+
+      iex> Exfake.file_name()
+      "river.pdf"
+  """
+  @spec file_name() :: String.t()
+  def file_name() do
+    {_mime, ext} = Enum.random(Web.mime_types())
+    "#{word()}.#{ext}"
+  end
+
+  @doc """
+  Returns a random browser User-Agent string.
+
+  ## Examples
+
+      iex> Exfake.user_agent()
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ..."
+  """
+  @spec user_agent() :: String.t()
+  def user_agent() do
+    Enum.random(Web.user_agents())
+  end
+
+  @doc """
+  Generates a random username in the form `word_wordN`.
+
+  ## Examples
+
+      iex> Exfake.username()
+      "mountain_river42"
+  """
+  @spec username() :: String.t()
+  def username() do
+    "#{word()}_#{word()}#{Enum.random(1..99)}"
+  end
+
+  @doc """
+  Returns a random US city name.
+
+  ## Examples
+
+      iex> Exfake.city()
+      "Denver"
+  """
+  @spec city() :: String.t()
+  def city(), do: Enum.random(Address.cities())
+
+  @doc """
+  Generates a random US street address.
+
+  ## Examples
+
+      iex> Exfake.street_address()
+      "742 Elm Street"
+  """
+  @spec street_address() :: String.t()
+  def street_address() do
+    "#{Enum.random(1..9999)} #{Enum.random(Address.street_names())} #{Enum.random(Address.street_types())}"
+  end
+
+  @doc """
+  Returns a random US state name.
+
+  ## Examples
+
+      iex> Exfake.state()
+      "California"
+  """
+  @spec state() :: String.t()
+  def state() do
+    {name, _abbr} = Enum.random(Address.states())
+    name
+  end
+
+  @doc """
+  Returns a random US state abbreviation.
+
+  ## Examples
+
+      iex> Exfake.state_abbr()
+      "CA"
+  """
+  @spec state_abbr() :: String.t()
+  def state_abbr() do
+    {_name, abbr} = Enum.random(Address.states())
+    abbr
+  end
+
+  @doc """
+  Returns a random country name.
+
+  ## Examples
+
+      iex> Exfake.country()
+      "Germany"
+  """
+  @spec country() :: String.t()
+  def country(), do: Enum.random(Address.countries())
+
+  @doc """
+  Generates a full US address combining street, city, state, and ZIP.
+
+  ## Examples
+
+      iex> Exfake.full_address()
+      "742 Elm Street, Denver, CO 80201"
+  """
+  @spec full_address() :: String.t()
+  def full_address() do
+    "#{street_address()}, #{city()}, #{state_abbr()} #{zip_code()}"
+  end
+
+  @password_chars String.graphemes(
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"
+                  )
+
+  @doc """
+  Generates a random password of the given length (default 12).
+
+  ## Examples
+
+      iex> Exfake.password()
+      "aB3!xZ9@kL2#"
+      iex> Exfake.password(20)
+      "Xk3!mZ9@aB2#qR5&wT1%"
+  """
+  @spec password(pos_integer()) :: String.t()
+  def password(length \\ 12) when is_integer(length) and length > 0 do
+    1..length |> Enum.map_join(fn _ -> Enum.random(@password_chars) end)
+  end
+
+  defp luhn_check_digit(partial) do
+    sum =
+      partial
+      |> String.graphemes()
+      |> Enum.map(&String.to_integer/1)
+      |> Enum.reverse()
+      |> Enum.with_index()
+      |> Enum.reduce(0, fn {digit, i}, acc ->
+        d = if rem(i, 2) == 0, do: digit * 2, else: digit
+        acc + if d > 9, do: d - 9, else: d
+      end)
+
+    rem(10 - rem(sum, 10), 10)
+  end
+
+  defp pad_hex(n, len) do
+    n |> Integer.to_string(16) |> String.downcase() |> String.pad_leading(len, "0")
+  end
+
+  defp hex_byte(n) do
+    n |> Integer.to_string(16) |> String.upcase() |> String.pad_leading(2, "0")
   end
 end

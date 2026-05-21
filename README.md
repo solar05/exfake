@@ -88,12 +88,88 @@ Exfake.http_code()
 Exfake.http_code(:server_error)
 503
 
+Exfake.mime_type()
+"image/png"
+
+Exfake.file_name()
+"river.pdf"
+
+Exfake.user_agent()
+"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ..."
+
+Exfake.uuid()
+"f47ac10b-58cc-4372-a567-0e02b2c3d479"
+
+Exfake.hex_color()
+"#A3F2C1"
+
+# Address
+Exfake.city()
+"Denver"
+
+Exfake.street_address()
+"742 Elm Street"
+
+Exfake.state()
+"California"
+
+Exfake.state_abbr()
+"CA"
+
+Exfake.country()
+"Germany"
+
+Exfake.full_address()
+"742 Elm Street, Denver, CO 80201"
+
 # Finance
 Exfake.currency()
 ["Japan Yen", "JPY", "¥"]
 
 Exfake.zip_code()
 "32107-6766"
+
+Exfake.price()
+249.99
+
+Exfake.price(5.0, 20.0)
+14.37
+
+Exfake.credit_card_type()
+"Visa"
+
+Exfake.credit_card_number()
+"4532015112830366"
+
+# Identity
+Exfake.username()
+"mountain_river42"
+
+Exfake.password()
+"aB3!xZ9@kL2#"
+
+Exfake.password(20)
+"Xk3!mZ9@aB2#qR5&wT1%"
+
+# Primitives
+Exfake.boolean()
+true
+
+Exfake.integer(1, 100)
+42
+
+Exfake.float(1.0, 5.0)
+3.14
+
+# Date
+Exfake.date()
+~D[2023-07-14]
+
+Exfake.past_date()
+~D[2025-11-03]
+
+Exfake.future_date()
+~D[2026-09-17]
 
 # Security testing
 Exfake.xss_string()
