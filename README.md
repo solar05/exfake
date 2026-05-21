@@ -13,7 +13,7 @@ by adding `exfake` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:exfake, "~> 2.2.0"}
+    {:exfake, "~> 2.3.0"}
   ]
 end
 ```
