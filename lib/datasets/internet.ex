@@ -69,6 +69,13 @@ defmodule Datasets.Internet do
     @free_domains
   end
 
+  @spec status_codes() :: %{
+          info: [non_neg_integer()],
+          success: [non_neg_integer()],
+          redirection: [non_neg_integer()],
+          client_error: [non_neg_integer()],
+          server_error: [non_neg_integer()]
+        }
   def status_codes() do
     @status_codes
   end

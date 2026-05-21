@@ -91,7 +91,7 @@ defmodule Exfake do
 
       iex> Exfake.sentence()
       "Judge taste page porter harmony."
-      iex> Exfake.sentece(3)
+      iex> Exfake.sentence(3)
       "Event minute view."
   """
   @spec sentence(pos_integer) :: String.t()
@@ -117,7 +117,7 @@ defmodule Exfake do
       "Nation wind. Sea stone. Minute comparison."
   """
   @spec paragraphs(pos_integer, pos_integer()) :: String.t()
-  def paragraphs(n \\ 3, limit \\ 5) when n > 0 do
+  def paragraphs(n \\ 3, limit \\ 5) when n > 0 and limit >= 2 do
     1..n |> Enum.map_join(" ", fn _ -> sentence(Enum.random(2..limit)) end)
   end
 
@@ -263,7 +263,7 @@ defmodule Exfake do
   @spec ipv4() :: String.t()
   def ipv4() do
     head = [Enum.random(1..255)]
-    body = 1..3 |> Enum.map(fn _ -> Enum.random(0..256) end)
+    body = 1..3 |> Enum.map(fn _ -> Enum.random(0..255) end)
     (head ++ body) |> Enum.join(".")
   end
 
@@ -280,8 +280,7 @@ defmodule Exfake do
   @spec ipv6() :: String.t()
   def ipv6() do
     1..8
-    |> Enum.map(fn _ -> Integer.to_string(Enum.random(0..65_536), 16) end)
-    |> Enum.join(":")
+    |> Enum.map_join(":", fn _ -> Integer.to_string(Enum.random(0..65_535), 16) end)
   end
 
   @doc """
@@ -290,15 +289,18 @@ defmodule Exfake do
   ## Examples
 
       iex> Exfake.mac()
-      "15:91:207:109:70:248"
+      "A1:0B:4F:C3:29:7E"
       iex> Exfake.mac()
-      "108:240:198:106:40:61"
+      "00:FF:12:AB:44:C8"
   """
   @spec mac() :: String.t()
   def mac() do
     1..6
-    |> Enum.map(fn _ -> String.downcase(Integer.to_string(Enum.random(0..256))) end)
-    |> Enum.join(":")
+    |> Enum.map_join(":", fn _ ->
+      Enum.random(0..255)
+      |> Integer.to_string(16)
+      |> String.pad_leading(2, "0")
+    end)
   end
 
   @doc """
@@ -351,7 +353,7 @@ defmodule Exfake do
 
       iex> Exfake.domain()
       "www.laboriosam.me"
-      iex> Exfake.email()
+      iex> Exfake.domain()
       "www.nihil.biz"
   """
   @spec domain() :: String.t()
@@ -383,11 +385,11 @@ defmodule Exfake do
       iex> Exfake.zip_code()
       "32107-6766"
       iex> Exfake.zip_code()
-      "9152"
+      "91527"
   """
   @spec zip_code() :: String.t()
   def zip_code() do
-    without_dash = 0..3 |> Enum.map_join(fn _ -> Enum.random(0..9) end)
+    without_dash = 0..4 |> Enum.map_join(fn _ -> Enum.random(0..9) end)
     with_dash = "#{without_dash}-#{Enum.map_join(0..3, fn _ -> Enum.random(0..9) end)}"
 
     [with_dash, without_dash] |> Enum.random()
