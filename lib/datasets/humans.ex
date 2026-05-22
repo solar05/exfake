@@ -1,6 +1,6 @@
-defmodule Datasets.Names do
+defmodule Datasets.Humans do
   @moduledoc """
-  Names dataset module.
+  Humans dataset module.
   """
 
   @first_names [
@@ -3487,6 +3487,53 @@ defmodule Datasets.Names do
     "Zulauf"
   ]
 
+  @job_titles [
+    "Software Engineer",
+    "Senior Software Engineer",
+    "Staff Engineer",
+    "Engineering Manager",
+    "Product Manager",
+    "Product Designer",
+    "UX Designer",
+    "UI Designer",
+    "Data Scientist",
+    "Data Engineer",
+    "Machine Learning Engineer",
+    "DevOps Engineer",
+    "Site Reliability Engineer",
+    "Backend Developer",
+    "Frontend Developer",
+    "Full Stack Developer",
+    "Mobile Developer",
+    "QA Engineer",
+    "Security Engineer",
+    "Cloud Architect",
+    "Technical Lead",
+    "CTO",
+    "CEO",
+    "COO",
+    "CFO",
+    "Marketing Manager",
+    "Sales Manager",
+    "Account Executive",
+    "Customer Success Manager",
+    "Business Analyst",
+    "Project Manager",
+    "Scrum Master",
+    "HR Manager",
+    "Recruiter",
+    "Financial Analyst",
+    "Operations Manager",
+    "Content Writer",
+    "Graphic Designer",
+    "Network Administrator",
+    "Database Administrator"
+  ]
+
+  @name_prefixes ["Mr.", "Mrs.", "Ms.", "Miss", "Dr.", "Prof."]
+
+  @blood_types ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
+
   @spec first_names() :: [String.t(), ...]
   def first_names() do
     @first_names
@@ -3495,5 +3542,20 @@ defmodule Datasets.Names do
   @spec last_names() :: [String.t(), ...]
   def last_names() do
     @last_names
+  end
+
+  @spec name_prefixes() :: [String.t(), ...]
+  def name_prefixes() do
+    @name_prefixes
+  end
+
+  @spec job_titles() :: [String.t(), ...]
+  def job_titles() do
+    @job_titles
+  end
+
+  @spec blood_types() :: [String.t(), ...]
+  def blood_types() do
+    @blood_types
   end
 end

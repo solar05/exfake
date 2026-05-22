@@ -708,18 +708,74 @@ defmodule Datasets.Lorem do
     ["Zimbabwe Dollar", "ZWD", "Z$"]
   ]
 
+  @timezones [
+    "Etc/UTC",
+    "America/New_York",
+    "America/Chicago",
+    "America/Denver",
+    "America/Los_Angeles",
+    "America/Anchorage",
+    "America/Honolulu",
+    "America/Toronto",
+    "America/Vancouver",
+    "America/Sao_Paulo",
+    "America/Argentina/Buenos_Aires",
+    "America/Mexico_City",
+    "Europe/London",
+    "Europe/Paris",
+    "Europe/Berlin",
+    "Europe/Madrid",
+    "Europe/Rome",
+    "Europe/Amsterdam",
+    "Europe/Stockholm",
+    "Europe/Moscow",
+    "Africa/Cairo",
+    "Africa/Johannesburg",
+    "Africa/Lagos",
+    "Asia/Dubai",
+    "Asia/Kolkata",
+    "Asia/Shanghai",
+    "Asia/Tokyo",
+    "Asia/Singapore",
+    "Asia/Seoul",
+    "Australia/Sydney",
+    "Pacific/Auckland"
+  ]
+
+  @emojis ~w(😀 😂 😍 🥳 😎 🤔 👍 ❤️ 🔥 🎉 ✨ 🌟 💡 🚀 🎯 🌈 💻 📱 🎵 🍕 🐱 🌍 ⚡ 🦊 🎸 🏆 🌺 🦋 🐬 🍀)
+
+  @uppercase_letters Enum.map(?A..?Z, &<<&1>>)
+
+  @card_prefixes [
+    {"4", 16},
+    {"51", 16},
+    {"52", 16},
+    {"53", 16},
+    {"54", 16},
+    {"55", 16},
+    {"34", 15},
+    {"37", 15},
+    {"6011", 16}
+  ]
+
   @spec en_words() :: [String.t(), ...]
-  def en_words() do
-    @en_words
-  end
+  def en_words(), do: @en_words
 
   @spec language_codes() :: [String.t(), ...]
-  def language_codes() do
-    @language_codes
-  end
+  def language_codes(), do: @language_codes
 
   @spec currencies() :: [[nonempty_binary(), ...], ...]
-  def currencies() do
-    @currencies
-  end
+  def currencies(), do: @currencies
+
+  @spec timezones() :: [String.t(), ...]
+  def timezones(), do: @timezones
+
+  @spec emojis() :: [String.t(), ...]
+  def emojis(), do: @emojis
+
+  @spec uppercase_letters() :: [String.t(), ...]
+  def uppercase_letters(), do: @uppercase_letters
+
+  @spec card_prefixes() :: [{String.t(), pos_integer()}]
+  def card_prefixes(), do: @card_prefixes
 end

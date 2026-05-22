@@ -147,12 +147,8 @@ defmodule Datasets.Xss do
   ]
 
   @spec data() :: [String.t(), ...]
-  def data() do
-    @data
-  end
+  def data(), do: @data
 
   @spec files() :: [String.t(), ...]
-  def files() do
-    @files
-  end
+  def files(), do: @files
 end

@@ -13,7 +13,7 @@ by adding `exfake` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:exfake, "~> 2.3.0"}
+    {:exfake, "~> 2.4.0"}
   ]
 end
 ```
@@ -24,6 +24,9 @@ Documentation can be found at [HexDocs.](https://hexdocs.pm/exfake/Exfake.html)
 
 ```elixir
 # Names
+Exfake.name_prefix()
+"Dr."
+
 Exfake.first_name()
 "Rosemary"
 
@@ -32,6 +35,9 @@ Exfake.last_name()
 
 Exfake.person()
 "Luciano Eichmann"
+
+Exfake.job_title()
+"Senior Software Engineer"
 
 # Phone
 Exfake.phone_number()
@@ -49,6 +55,12 @@ Exfake.paragraphs()
 
 Exfake.language_code()
 "ne"
+
+Exfake.hashtag()
+"#language"
+
+Exfake.emoji()
+"🚀"
 
 # Company
 Exfake.company_suffix()
@@ -103,6 +115,18 @@ Exfake.uuid()
 Exfake.hex_color()
 "#A3F2C1"
 
+Exfake.rgb_color()
+{163, 242, 193}
+
+Exfake.slug()
+"mountain-river-42"
+
+Exfake.semver()
+"2.14.3"
+
+Exfake.port()
+8080
+
 # Address
 Exfake.city()
 "Denver"
@@ -151,6 +175,12 @@ Exfake.password()
 Exfake.password(20)
 "Xk3!mZ9@aB2#qR5&wT1%"
 
+Exfake.ssn()
+"078-05-1120"
+
+Exfake.tax_id()
+"12-3456789"
+
 # Primitives
 Exfake.boolean()
 true
@@ -161,7 +191,7 @@ Exfake.integer(1, 100)
 Exfake.float(1.0, 5.0)
 3.14
 
-# Date
+# Date / Time
 Exfake.date()
 ~D[2023-07-14]
 
@@ -170,6 +200,22 @@ Exfake.past_date()
 
 Exfake.future_date()
 ~D[2026-09-17]
+
+Exfake.time()
+~T[14:32:07]
+
+Exfake.datetime()
+#DateTime<2023-07-14 14:32:07Z>
+
+Exfake.timezone()
+"America/New_York"
+
+# Miscellaneous
+Exfake.blood_type()
+"O+"
+
+Exfake.license_plate()
+"ABC-1234"
 
 # Security testing
 Exfake.xss_string()

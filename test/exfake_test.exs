@@ -1,6 +1,20 @@
 defmodule ExfakeTest do
   use ExUnit.Case
 
+  describe "name_prefix/0" do
+    test "returns a known prefix" do
+      assert Exfake.name_prefix() in ["Mr.", "Mrs.", "Ms.", "Miss", "Dr.", "Prof."]
+    end
+  end
+
+  describe "job_title/0" do
+    test "returns a non-empty string starting with a capital letter" do
+      title = Exfake.job_title()
+      assert is_binary(title)
+      assert title =~ ~r/^[A-Z]/
+    end
+  end
+
   describe "first_name/0" do
     test "returns a non-empty string" do
       name = Exfake.first_name()
@@ -273,6 +287,37 @@ defmodule ExfakeTest do
     end
   end
 
+  describe "rgb_color/0" do
+    test "returns a 3-tuple of integers in 0..255" do
+      {r, g, b} = Exfake.rgb_color()
+
+      for v <- [r, g, b] do
+        assert is_integer(v)
+        assert v in 0..255
+      end
+    end
+  end
+
+  describe "slug/0" do
+    test "matches word-word-number pattern" do
+      assert Exfake.slug() =~ ~r/^[a-z]+-[a-z]+-\d+$/
+    end
+  end
+
+  describe "semver/0" do
+    test "matches MAJOR.MINOR.PATCH format" do
+      assert Exfake.semver() =~ ~r/^\d+\.\d+\.\d+$/
+    end
+  end
+
+  describe "port/0" do
+    test "returns an integer in 1..65535" do
+      p = Exfake.port()
+      assert is_integer(p)
+      assert p in 1..65_535
+    end
+  end
+
   describe "hex_color/0" do
     test "matches #RRGGBB uppercase hex format" do
       assert Exfake.hex_color() =~ ~r/^#[0-9A-F]{6}$/
@@ -299,6 +344,41 @@ defmodule ExfakeTest do
 
     test "raises for non-positive days" do
       assert_raise FunctionClauseError, fn -> Exfake.past_date(0) end
+    end
+  end
+
+  describe "time/0" do
+    test "returns a Time struct" do
+      assert %Time{} = Exfake.time()
+    end
+
+    test "hour, minute, second are in valid ranges" do
+      t = Exfake.time()
+      assert t.hour in 0..23
+      assert t.minute in 0..59
+      assert t.second in 0..59
+    end
+  end
+
+  describe "datetime/0" do
+    test "returns a DateTime struct" do
+      assert %DateTime{} = Exfake.datetime()
+    end
+
+    test "is in UTC timezone" do
+      assert Exfake.datetime().time_zone == "Etc/UTC"
+    end
+  end
+
+  describe "timezone/0" do
+    test "returns a non-empty string" do
+      tz = Exfake.timezone()
+      assert is_binary(tz)
+      assert String.length(tz) > 0
+    end
+
+    test "contains a slash (IANA region/city format)" do
+      assert String.contains?(Exfake.timezone(), "/")
     end
   end
 
@@ -334,6 +414,23 @@ defmodule ExfakeTest do
     test "is rounded to 2 decimal places" do
       p = Exfake.price()
       assert Float.round(p, 2) == p
+    end
+  end
+
+  describe "ssn/0" do
+    test "matches XXX-XX-XXXX format" do
+      assert Exfake.ssn() =~ ~r/^\d{3}-\d{2}-\d{4}$/
+    end
+
+    test "area code is in valid range 001-899" do
+      area = Exfake.ssn() |> String.split("-") |> hd() |> String.to_integer()
+      assert area in 1..899
+    end
+  end
+
+  describe "tax_id/0" do
+    test "matches XX-XXXXXXX format" do
+      assert Exfake.tax_id() =~ ~r/^\d{2}-\d{7}$/
     end
   end
 
@@ -407,6 +504,36 @@ defmodule ExfakeTest do
   describe "full_address/0" do
     test "matches 'street, city, ST ZIP' format" do
       assert Exfake.full_address() =~ ~r/.+, .+, [A-Z]{2} \d{5}/
+    end
+  end
+
+  describe "blood_type/0" do
+    test "returns one of the 8 standard blood types" do
+      assert Exfake.blood_type() in ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"]
+    end
+  end
+
+  describe "hashtag/0" do
+    test "starts with # followed by a lowercase word" do
+      assert Exfake.hashtag() =~ ~r/^#[a-z]+$/
+    end
+  end
+
+  describe "emoji/0" do
+    test "returns a non-empty string" do
+      e = Exfake.emoji()
+      assert is_binary(e)
+      assert String.length(e) > 0
+    end
+
+    test "is a single grapheme cluster" do
+      assert length(String.graphemes(Exfake.emoji())) == 1
+    end
+  end
+
+  describe "license_plate/0" do
+    test "matches LLL-DDDD format" do
+      assert Exfake.license_plate() =~ ~r/^[A-Z]{3}-\d{4}$/
     end
   end
 

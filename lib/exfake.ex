@@ -3,7 +3,7 @@ defmodule Exfake do
   Documentation for `Exfake`.
   """
 
-  alias Datasets.{Names, Phones, Lorem, Company, Xss, Internet, Web, Address}
+  alias Datasets.{Humans, Phones, Lorem, Company, Xss, Internet, Web, Address}
 
   @doc """
   Generates first name.
@@ -17,7 +17,7 @@ defmodule Exfake do
   """
   @spec first_name() :: String.t()
   def first_name() do
-    Enum.random(Names.first_names())
+    Enum.random(Humans.first_names())
   end
 
   @doc """
@@ -32,7 +32,7 @@ defmodule Exfake do
   """
   @spec last_name() :: String.t()
   def last_name() do
-    Enum.random(Names.last_names())
+    Enum.random(Humans.last_names())
   end
 
   @doc """
@@ -49,6 +49,28 @@ defmodule Exfake do
   def person() do
     "#{first_name()} #{last_name()}"
   end
+
+  @doc """
+  Returns a random name prefix.
+
+  ## Examples
+
+      iex> Exfake.name_prefix()
+      "Dr."
+  """
+  @spec name_prefix() :: String.t()
+  def name_prefix(), do: Enum.random(Humans.name_prefixes())
+
+  @doc """
+  Returns a random job title.
+
+  ## Examples
+
+      iex> Exfake.job_title()
+      "Senior Software Engineer"
+  """
+  @spec job_title() :: String.t()
+  def job_title(), do: Enum.random(Humans.job_titles())
 
   @doc """
   Generates phone number which formatted randomly.
@@ -262,9 +284,7 @@ defmodule Exfake do
   """
   @spec ipv4() :: String.t()
   def ipv4() do
-    head = [Enum.random(1..255)]
-    body = 1..3 |> Enum.map(fn _ -> Enum.random(0..255) end)
-    (head ++ body) |> Enum.join(".")
+    "#{Enum.random(1..255)}.#{Enum.random(0..255)}.#{Enum.random(0..255)}.#{Enum.random(0..255)}"
   end
 
   @doc """
@@ -389,8 +409,8 @@ defmodule Exfake do
   """
   @spec zip_code() :: String.t()
   def zip_code() do
-    without_dash = 0..4 |> Enum.map_join(fn _ -> Enum.random(0..9) end)
-    with_dash = "#{without_dash}-#{Enum.map_join(0..3, fn _ -> Enum.random(0..9) end)}"
+    without_dash = 1..5 |> Enum.map_join(fn _ -> Enum.random(0..9) end)
+    with_dash = "#{without_dash}-#{Enum.map_join(1..4, fn _ -> Enum.random(0..9) end)}"
 
     [with_dash, without_dash] |> Enum.random()
   end
@@ -466,6 +486,56 @@ defmodule Exfake do
   end
 
   @doc """
+  Returns a random RGB color as a `{red, green, blue}` tuple.
+
+  ## Examples
+
+      iex> Exfake.rgb_color()
+      {163, 242, 193}
+  """
+  @spec rgb_color() :: {0..255, 0..255, 0..255}
+  def rgb_color() do
+    {Enum.random(0..255), Enum.random(0..255), Enum.random(0..255)}
+  end
+
+  @doc """
+  Generates a random URL slug.
+
+  ## Examples
+
+      iex> Exfake.slug()
+      "mountain-river-42"
+  """
+  @spec slug() :: String.t()
+  def slug() do
+    "#{word()}-#{word()}-#{Enum.random(1..999)}"
+  end
+
+  @doc """
+  Generates a random semantic version string.
+
+  ## Examples
+
+      iex> Exfake.semver()
+      "2.14.3"
+  """
+  @spec semver() :: String.t()
+  def semver() do
+    "#{Enum.random(0..10)}.#{Enum.random(0..20)}.#{Enum.random(0..99)}"
+  end
+
+  @doc """
+  Returns a random TCP/UDP port number (1–65535).
+
+  ## Examples
+
+      iex> Exfake.port()
+      8080
+  """
+  @spec port() :: 1..65_535
+  def port(), do: Enum.random(1..65_535)
+
+  @doc """
   Generates a random `Date` within ±10 years of today.
 
   ## Examples
@@ -509,6 +579,43 @@ defmodule Exfake do
   end
 
   @doc """
+  Generates a random `Time`.
+
+  ## Examples
+
+      iex> Exfake.time()
+      ~T[14:32:07]
+  """
+  @spec time() :: Time.t()
+  def time() do
+    Time.new!(Enum.random(0..23), Enum.random(0..59), Enum.random(0..59))
+  end
+
+  @doc """
+  Generates a random UTC `DateTime`.
+
+  ## Examples
+
+      iex> Exfake.datetime()
+      #DateTime<2023-07-14 14:32:07Z>
+  """
+  @spec datetime() :: DateTime.t()
+  def datetime() do
+    DateTime.new!(date(), time(), "Etc/UTC")
+  end
+
+  @doc """
+  Returns a random IANA timezone name.
+
+  ## Examples
+
+      iex> Exfake.timezone()
+      "America/New_York"
+  """
+  @spec timezone() :: String.t()
+  def timezone(), do: Enum.random(Lorem.timezones())
+
+  @doc """
   Generates a random price rounded to 2 decimal places.
 
   ## Examples
@@ -522,18 +629,6 @@ defmodule Exfake do
   def price(min \\ 1.0, max \\ 1000.0) when is_number(min) and is_number(max) and min <= max do
     (min + :rand.uniform() * (max - min)) |> Float.round(2)
   end
-
-  @card_prefixes [
-    {"4", 16},
-    {"51", 16},
-    {"52", 16},
-    {"53", 16},
-    {"54", 16},
-    {"55", 16},
-    {"34", 15},
-    {"37", 15},
-    {"6011", 16}
-  ]
 
   @doc """
   Returns a random credit card type name.
@@ -558,10 +653,41 @@ defmodule Exfake do
   """
   @spec credit_card_number() :: String.t()
   def credit_card_number() do
-    {prefix, length} = Enum.random(@card_prefixes)
+    {prefix, length} = Enum.random(Lorem.card_prefixes())
     fill = length - String.length(prefix) - 1
     partial = prefix <> Enum.map_join(1..fill, fn _ -> Integer.to_string(Enum.random(0..9)) end)
     partial <> Integer.to_string(luhn_check_digit(partial))
+  end
+
+  @doc """
+  Generates a random US Social Security Number in XXX-XX-XXXX format.
+
+  ## Examples
+
+      iex> Exfake.ssn()
+      "078-05-1120"
+  """
+  @spec ssn() :: String.t()
+  def ssn() do
+    area = Enum.random(1..899) |> Integer.to_string() |> String.pad_leading(3, "0")
+    group = Enum.random(1..99) |> Integer.to_string() |> String.pad_leading(2, "0")
+    serial = Enum.random(1..9999) |> Integer.to_string() |> String.pad_leading(4, "0")
+    "#{area}-#{group}-#{serial}"
+  end
+
+  @doc """
+  Generates a random US Employer Identification Number in XX-XXXXXXX format.
+
+  ## Examples
+
+      iex> Exfake.tax_id()
+      "12-3456789"
+  """
+  @spec tax_id() :: String.t()
+  def tax_id() do
+    prefix = Enum.random(10..99)
+    suffix = Enum.random(1_000_000..9_999_999)
+    "#{prefix}-#{suffix}"
   end
 
   @doc """
@@ -694,9 +820,53 @@ defmodule Exfake do
     "#{street_address()}, #{city()}, #{state_abbr()} #{zip_code()}"
   end
 
-  @password_chars String.graphemes(
-                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"
-                  )
+  @doc """
+  Returns a random ABO/Rh blood type.
+
+  ## Examples
+
+      iex> Exfake.blood_type()
+      "O+"
+  """
+  @spec blood_type() :: String.t()
+  def blood_type(), do: Enum.random(Humans.blood_types())
+
+  @doc """
+  Generates a random hashtag built from an English word.
+
+  ## Examples
+
+      iex> Exfake.hashtag()
+      "#language"
+  """
+  @spec hashtag() :: String.t()
+  def hashtag(), do: "##{word()}"
+
+  @doc """
+  Returns a random emoji.
+
+  ## Examples
+
+      iex> Exfake.emoji()
+      "🚀"
+  """
+  @spec emoji() :: String.t()
+  def emoji(), do: Enum.random(Lorem.emojis())
+
+  @doc """
+  Generates a random license plate in LLL-DDDD format.
+
+  ## Examples
+
+      iex> Exfake.license_plate()
+      "ABC-1234"
+  """
+  @spec license_plate() :: String.t()
+  def license_plate() do
+    letters = Enum.map_join(1..3, fn _ -> Enum.random(Lorem.uppercase_letters()) end)
+    digits = Enum.map_join(1..4, fn _ -> Integer.to_string(Enum.random(0..9)) end)
+    "#{letters}-#{digits}"
+  end
 
   @doc """
   Generates a random password of the given length (default 12).
@@ -710,7 +880,7 @@ defmodule Exfake do
   """
   @spec password(pos_integer()) :: String.t()
   def password(length \\ 12) when is_integer(length) and length > 0 do
-    1..length |> Enum.map_join(fn _ -> Enum.random(@password_chars) end)
+    1..length |> Enum.map_join(fn _ -> Enum.random(Web.password_chars()) end)
   end
 
   defp luhn_check_digit(partial) do

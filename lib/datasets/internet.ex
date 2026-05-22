@@ -60,14 +60,10 @@ defmodule Datasets.Internet do
   }
 
   @spec suffixes() :: [String.t(), ...]
-  def suffixes() do
-    @suffixes
-  end
+  def suffixes(), do: @suffixes
 
   @spec free_domains() :: [String.t(), ...]
-  def free_domains() do
-    @free_domains
-  end
+  def free_domains(), do: @free_domains
 
   @spec status_codes() :: %{
           info: [non_neg_integer()],
@@ -76,7 +72,5 @@ defmodule Datasets.Internet do
           client_error: [non_neg_integer()],
           server_error: [non_neg_integer()]
         }
-  def status_codes() do
-    @status_codes
-  end
+  def status_codes(), do: @status_codes
 end

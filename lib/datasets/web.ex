@@ -37,9 +37,16 @@ defmodule Datasets.Web do
     "curl/8.7.1"
   ]
 
+  @password_chars String.graphemes(
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"
+                  )
+
   @spec mime_types() :: [{String.t(), String.t()}]
   def mime_types(), do: @mime_types
 
   @spec user_agents() :: [String.t()]
   def user_agents(), do: @user_agents
+
+  @spec password_chars() :: [String.t()]
+  def password_chars(), do: @password_chars
 end

@@ -498,17 +498,11 @@ defmodule Datasets.Company do
   ]
 
   @spec suffixes() :: [String.t(), ...]
-  def suffixes() do
-    @suffixes
-  end
+  def suffixes(), do: @suffixes
 
   @spec catch_phrase_words() :: [[String.t()], ...]
-  def catch_phrase_words() do
-    @catch_phrase_words
-  end
+  def catch_phrase_words(), do: @catch_phrase_words
 
   @spec bs_words() :: [[String.t()], ...]
-  def bs_words() do
-    @bs_words
-  end
+  def bs_words(), do: @bs_words
 end

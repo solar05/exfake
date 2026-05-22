@@ -26,7 +26,5 @@ defmodule Datasets.Phones do
   ]
 
   @spec formats() :: [String.t(), ...]
-  def formats() do
-    @formats
-  end
+  def formats(), do: @formats
 end
